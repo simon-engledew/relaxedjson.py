@@ -4,7 +4,11 @@
 pip install relaxedjson
 ```
 
-Parses JSON that is missing quotes around the keys.
+See http://pythonhosted.org/relaxedjson/
+
+A more relaxed JSON parser that supports missing quotes on keys.
+
+Standard JSON:
 
 ```python
 >>> import json
@@ -18,10 +22,17 @@ Traceback (most recent call last):
   File ".../python2.7/json/decoder.py", line 380, in raw_decode
     obj, end = self.scan_once(s, idx)
 ValueError: Expecting property name: line 1 column 2 (char 1)
+```
 
+Relaxed JSON:
+
+```python
 >>> import relaxedjson
 >>> relaxedjson.parse('{moose: "goose"}')
 {'moose': 'goose'}
 ```
 
-See http://pythonhosted.org/relaxedjson/
+## Todo:
+
+- [ ] Support comment stripping.
+- [ ] Support - in keys
