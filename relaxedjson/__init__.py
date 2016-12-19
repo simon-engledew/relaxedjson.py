@@ -5,9 +5,13 @@ for parsing JSON that is missing quotes around its keys.
 Uses the parser-combinator library Parsec (https://github.com/sighingnow/parsec.py)
 
 To install from pypi::
+
     pip install relaxedjson
+
 To install as an egg-link in development mode::
+
     python setup.py develop -N
+
 """
 
 import re
@@ -101,7 +105,12 @@ parser = whitespace >> (json_object | array)
 
 def parse(text):
     """
-    Attempt to parse text returning a Python object or raising a parsec.ParseError
+    Attempt to parse JSON text, returning an object
+
+    :param text: String containing json
+
+    :rtype: dict or list
+    :raises: parsec.ParseError
     """
     return parser.parse_strict(text)
 

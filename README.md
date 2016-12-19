@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/simon-engledew/sshim.svg?branch=master)](https://travis-ci.org/simon-engledew/sshim)
+
 ```
 pip install relaxedjson
 ```
@@ -21,3 +23,5 @@ ValueError: Expecting property name: line 1 column 2 (char 1)
 >>> relaxedjson.parse('{moose: "goose"}')
 {'moose': 'goose'}
 ```
+
+See http://pythonhosted.org/relaxedjson/
