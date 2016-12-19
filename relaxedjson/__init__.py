@@ -34,16 +34,17 @@ false = lexeme(string('false')).result(False)
 null = lexeme(string('null')).result(None)
 quote = string('"') | string("'")
 
-
 def number():
     return lexeme(
         regex(r'-?(0|[1-9][0-9]*)([.][0-9]+)?([eE][+-]?[0-9]+)?')
     ).parsecmap(float)
 
+def to_unichr(value):
+    return unichr(int(value[1:], 16))
 
-def charseq():
+def charseq(end_quote):
     def string_part():
-        return regex(r'[^"\'\\]+')
+        return regex(r'[^{}\\]+'.format(end_quote))
 
     def string_esc():
         return string('\\') >> (
@@ -54,8 +55,8 @@ def charseq():
             | string('n').result('\n')
             | string('r').result('\r')
             | string('t').result('\t')
-            | regex(r'u[0-9a-fA-F]{4}').parsecmap(lambda s: chr(int(s[1:], 16)))
-            | quote
+            | regex(r'u[0-9a-fA-F]{4}').parsecmap(to_unichr)
+            | string(end_quote)
         )
     return string_part() | string_esc()
 
@@ -66,9 +67,9 @@ class StopGenerator(StopIteration):
 @lexeme
 @generate
 def quoted():
-    yield quote
-    body = yield many(charseq())
-    yield quote
+    end_quote = yield quote
+    body = yield many(charseq(end_quote))
+    yield string(end_quote)
     raise StopGenerator(''.join(body))
 
 @generate
@@ -96,12 +97,12 @@ def json_object():
 
 value = quoted | number() | json_object | array | true | false | null
 
-parser = whitespace >> json_object
+parser = whitespace >> (json_object | array)
 
 def parse(text):
     """
     Attempt to parse text returning a Python object or raising a parsec.ParseError
     """
-    return parser.parse(text)
+    return parser.parse_strict(text)
 
 __all__ = ['parse']
