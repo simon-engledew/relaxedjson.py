@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/simon-engledew/sshim.svg?branch=master)](https://travis-ci.org/simon-engledew/sshim)
+[![Build Status](https://travis-ci.org/simon-engledew/relaxedjson.svg?branch=master)](https://travis-ci.org/simon-engledew/relaxedjson)
 
 # Relaxed JSON
 
