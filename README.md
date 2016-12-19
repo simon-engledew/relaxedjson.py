@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/simon-engledew/sshim.svg?branch=master)](https://travis-ci.org/simon-engledew/sshim)
 
+# Relaxed JSON
+
 ```
 pip install relaxedjson
 ```
@@ -8,7 +10,7 @@ See http://pythonhosted.org/relaxedjson/
 
 A more relaxed JSON parser that supports missing quotes on keys.
 
-Standard JSON:
+### Standard JSON:
 
 ```python
 >>> import json
@@ -24,7 +26,7 @@ Traceback (most recent call last):
 ValueError: Expecting property name: line 1 column 2 (char 1)
 ```
 
-Relaxed JSON:
+### Relaxed JSON:
 
 ```python
 >>> import relaxedjson
@@ -32,7 +34,7 @@ Relaxed JSON:
 {'moose': 'goose'}
 ```
 
-## Todo:
+### Todo:
 
 - [ ] Support comment stripping.
 - [ ] Support - in keys

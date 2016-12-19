@@ -8,10 +8,23 @@ setup(
     description=(
         "A relaxed JSON parser that accepts keys without double quotes."
     ),
+    extras_require={
+        'tests': [
+            'nose'
+        ]
+    },
     url="http://github.com/simon-engledew/relaxedjson",
     install_requires=['parsec'],
     license="MIT",
-    keywords="relaxed json parser combinator parsec",
+    keywords=[
+        "relaxed json",
+        "relaxed",
+        "json",
+        "parser",
+        "javascript",
+        "combinator",
+        "parsec",
+    ],
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
