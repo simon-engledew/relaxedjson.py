@@ -20,12 +20,16 @@ from parsec import (
     regex,
     string,
     generate,
-    many
+    many,
+    endBy
 )
 
 whitespace = regex(r'\s*', re.MULTILINE)
 
 lexeme = lambda p: p << whitespace
+
+comment = string('/*') >> regex(r'(?:[^*]|\*(?!\/))+', re.MULTILINE) << string('*/')
+comment = lexeme(comment)
 
 lbrace = lexeme(string('{'))
 rbrace = lexeme(string('}'))
@@ -78,25 +82,25 @@ def quoted():
 
 @generate
 def array():
-    yield lbrack
+    yield lbrack << many(comment)
     elements = yield sepBy(value, comma)
-    yield rbrack
+    yield rbrack << many(comment)
     raise StopGenerator(elements)
 
 
 @generate
 def object_pair():
-    key = yield regex(r'[a-zA-Z][a-zA-Z0-9]*') | quoted
-    yield colon
+    key = yield quoted | lexeme(regex(r'[a-zA-Z][-_a-zA-Z0-9]*'))
+    yield many(comment) << colon << many(comment)
     val = yield value
     raise StopGenerator((key, val))
 
 
 @generate
 def json_object():
-    yield lbrace
+    yield lbrace << many(comment)
     pairs = yield sepBy(object_pair, comma)
-    yield rbrace
+    yield many(comment) << rbrace
     raise StopGenerator(dict(pairs))
 
 value = quoted | number() | json_object | array | true | false | null

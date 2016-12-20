@@ -9,7 +9,7 @@ JSONDOCS = [
     # http://json.org/JSON_checker/test/fail2.json
     '["Unclosed array"',
     # http://json.org/JSON_checker/test/fail3.json
-    '{unquoted_key: "keys must be quoted"}',
+    # '{unquoted_key: "keys must be quoted"}',
     # http://json.org/JSON_checker/test/fail4.json
     # '["extra comma",]',
     # http://json.org/JSON_checker/test/fail5.json
@@ -151,6 +151,33 @@ class TestParse(unittest.TestCase):
     @property
     def JSONDecodeError(self):
         return parsec.ParseError
+
+    def test_unquoted_key(self):
+        self.assertEqual(self.loads('{moose: "goose"}'), {'moose': 'goose'})
+        self.assertEqual(self.loads('{ moose : "goose"}'), {'moose': 'goose'})
+        self.assertEqual(self.loads('{moose_key: "goose"}'), {'moose_key': 'goose'})
+        self.assertEqual(self.loads('{moose-key: "goose"}'), {'moose-key': 'goose'})
+        self.assertEqual(self.loads('{moose-key10: "goose"}'), {'moose-key10': 'goose'})
+
+    def test_multiline(self):
+        self.assertEqual(self.loads("""{key:
+"value"}"""), {'key': 'value'})
+        self.assertEqual(self.loads("""{
+key:
+"value"
+}"""), {'key': 'value'})
+
+    def test_comments(self):
+        self.assertEqual(self.loads('{/* moose */}'), {})
+        self.assertEqual(self.loads('{/** moose */}'), {})
+        self.assertEqual(self.loads('[/** moose **/]'), [])
+        self.assertEqual(self.loads("""{/** moose */key:"value"}"""), {'key': 'value'})
+        self.assertEqual(self.loads("""{key:"value"/** moose */}"""), {'key': 'value'})
+        self.assertEqual(self.loads("""{key:"value"}"""), {'key': 'value'})
+        self.assertEqual(self.loads("""{key:/** moose */"value"}"""), {'key': 'value'})
+        self.assertEqual(self.loads("""{key:
+/** moose */
+"value"}"""), {'key': 'value'})
 
     def test_empty_objects(self):
         self.assertEqual(self.loads('{}'), {})

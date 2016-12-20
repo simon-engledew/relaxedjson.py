@@ -33,8 +33,3 @@ ValueError: Expecting property name: line 1 column 2 (char 1)
 >>> relaxedjson.parse('{moose: "goose"}')
 {'moose': 'goose'}
 ```
-
-### Todo:
-
-- [ ] Support comment stripping.
-- [ ] Support - in keys
